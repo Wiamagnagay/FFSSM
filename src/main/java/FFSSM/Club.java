@@ -3,6 +3,7 @@
  */
 package FFSSM;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import lombok.Getter;
@@ -22,9 +23,12 @@ public class Club {
     @Getter @Setter
     public String telephone;
 
+    private Set<Plongee> plongeesOrganisees;
+
     public Club(DiplomeDeMoniteur president, String nom) {
         this.president = president;
         this.nom = nom;
+        this.plongeesOrganisees = new HashSet<>();
     }
 
     /**
@@ -34,8 +38,13 @@ public class Club {
      * @return l'ensemble des plongées non conformes
      */
     public Set<Plongee> plongeesNonConformes() {
-         // TODO: Implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        Set<Plongee> nonConformes = new HashSet<>();
+        for (Plongee plongee : plongeesOrganisees) {
+            if (!plongee.estConforme()) {
+                nonConformes.add(plongee);
+            }
+        }
+        return nonConformes;
     }
 
     /**
@@ -43,13 +52,13 @@ public class Club {
      * @param p la nouvelle plongée
      */
     public void organisePlongee(Plongee p) {
-         // TODO: Implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        plongeesOrganisees.add(p);
     }
-
 
     @Override
     public String toString() {
         return "Club{" + "président=" + president + ", nom=" + nom + ", adresse=" + adresse + ", telephone=" + telephone + '}';
     }
-}
+    public int nombrePlongeesOrganisees() {
+    return plongeesOrganisees.size();
+}}

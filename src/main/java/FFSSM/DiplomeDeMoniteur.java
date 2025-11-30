@@ -1,44 +1,71 @@
-/**
- * @(#) Moniteur.java
- */
 package FFSSM;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiplomeDeMoniteur {
-
-    private final int numeroDiplome;
-    private final Plongeur possesseur;
-
-    public DiplomeDeMoniteur(Plongeur possesseur, int numeroDiplome) {
-        this.numeroDiplome = numeroDiplome;
-        this.possesseur = possesseur;
-    }
-
-    /**
-     * Si ce moniteur n'a pas d'embauche, ou si sa dernière embauche est terminée,
-     * ce moniteur n'a pas d'employeur.
-     * @return l'employeur actuel de ce moniteur ou null s'il n'en a pas
-     */
-    public Club employeurActuel() {
-         // TODO: Implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+    private Plongeur plongeur;
+    private int niveau;
+    private String numeroDiplome;
+    private List<Embauche> embauches;
+    
+    public DiplomeDeMoniteur(Plongeur plongeur, int niveau) {
+        if (plongeur == null) {
+            throw new IllegalArgumentException("Le plongeur ne peut pas être null");
+        }
+        if (niveau < 1 || niveau > 4) {
+            throw new IllegalArgumentException("Le niveau doit être entre 1 et 4");
+        }
+        this.plongeur = plongeur;
+        this.niveau = niveau;
+        this.numeroDiplome = "DIP-" + System.currentTimeMillis();
+        this.embauches = new ArrayList<>();
     }
     
-    /**
-     * Enregistrer une nouvelle embauche pour cet employeur
-     * @param employeur le club employeur
-     * @param debutNouvelle la date de début de l'embauche
-     */
-    public void nouvelleEmbauche(Club employeur, LocalDate debutNouvelle) {   
-         // TODO: Implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");	    
+    public Plongeur getPlongeur() {
+        return plongeur;
     }
-
-    public List<Embauche> emplois() {
-         // TODO: Implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+    
+    public int getNiveau() {
+        return niveau;
     }
-
+    
+    public String getNiveauTexte() {
+        switch(niveau) {
+            case 1: return "E1";
+            case 2: return "E2";
+            case 3: return "E3";
+            case 4: return "E4";
+            default: return "Inconnu";
+        }
+    }
+    
+    public boolean peutPresiderClub() {
+        return niveau >= 3; // E3 ou E4 peuvent présider
+    }
+    
+    public boolean peutEncadrerNiveau(int niveauPlongeur) {
+        // E4 peut encadrer tous les niveaux
+        if (niveau == 4) return true;
+        
+        // E3 peut encadrer jusqu'au niveau 3
+        if (niveau == 3) return niveauPlongeur <= 3;
+        
+        // E2 peut encadrer jusqu'au niveau 2  
+        if (niveau == 2) return niveauPlongeur <= 2;
+        
+        // E1 ne peut encadrer que le niveau 1
+        if (niveau == 1) return niveauPlongeur == 1;
+        
+        return false;
+    }
+    
+    // Méthodes pour gérer les embauches
+    public void ajouterEmbauche(Embauche embauche) {
+        embauches.add(embauche);
+    }
+    
+    public List<Embauche> getEmbauches() {
+        return new ArrayList<>(embauches);
+    }
 }
